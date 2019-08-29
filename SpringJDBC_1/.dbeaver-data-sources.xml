@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data-sources>
+	<data-source id="sqlite_jdbc-169efc1c078-21726decce6301a9" provider="generic" driver="sqlite_jdbc" name="SQLite - SpringDB.db" save-password="true" read-only="false">
+		<connection server="" database="C:\Users\Vad\eclipse-workspace\SpringDB_33.zip_expanded\SpringDB_33\db\SpringDB.db" url="jdbc:sqlite:C:\Users\Vad\eclipse-workspace\SpringDB_33.zip_expanded\SpringDB_33\db\SpringDB.db" type="dev"/>
+	</data-source>
+	<filters/>
+</data-sources>

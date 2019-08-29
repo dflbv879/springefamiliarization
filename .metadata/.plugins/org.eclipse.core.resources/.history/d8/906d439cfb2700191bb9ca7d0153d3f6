@@ -1,0 +1,8 @@
+package ллл;
+
+public class kek {
+
+	public static void main(String arg[]) {
+		System.out.println("fds");
+	}
+}

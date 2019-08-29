@@ -1,0 +1,28 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+   Hello from jsp 
+   <br>
+   
+   <%!
+     private int sum (int a,int b){
+	   return a+b;
+   }
+   %>
+   
+   <% 
+      int i = 1;
+      out.println(i);
+   %>
+   
+   <%
+      out.println("/n"+sum(1,2));
+   %>
+</body>
+</html>

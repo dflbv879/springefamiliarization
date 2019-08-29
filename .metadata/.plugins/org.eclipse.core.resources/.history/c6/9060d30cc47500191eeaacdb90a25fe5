@@ -1,0 +1,27 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.Arrays"%>    
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+   Hello from jsp 
+   <br>
+   
+   <%!
+     private int sum (int a,int b){
+	   return a+b;
+   }
+   %>
+     
+   <%
+      for(int i= 0 ;i<5;i++){
+    	 out.println("<br> i = "+i);
+      }
+   %>
+  
+</body>
+</html>

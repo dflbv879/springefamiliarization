@@ -1,0 +1,120 @@
+package spring.dao.impls;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import javax.sql.DataSource;
+import javax.swing.tree.RowMapper;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Component;
+
+import spring.dao.interfaces.MP3Dao;
+import spring.dao.objects.MP3;
+
+@Component("sqliteDAO")
+public class SQLiteDAO implements MP3Dao{
+
+	private NamedParameterJdbcTemplate jdbcTemplate;
+	
+	private DataSource dataSource;
+	
+	private SimpleJdbcInsert insertMp3;
+	
+	@Autowired
+	public void setDataSource(DataSource dataSource) {
+		this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		this.insertMp3 = new SimpleJdbcInsert(dataSource).withTableName("mp3").usingColumns("name","author");
+		this.dataSource = dataSource;
+	}
+	
+	
+	@Override
+	public int insert(MP3 mp3) {		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+	    params.addValue("name", mp3.getName());
+	    params.addValue("author", mp3.getAuthor());
+		return insertMp3.execute(params);
+	}
+
+	@Override
+	public void delete(MP3 mp3) {
+		deleteById(mp3.getId());
+		
+	}
+
+	@Override
+	public MP3 getMP3ByID(int id) {
+		String sql ="select * from mp3 where id =:id";
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("id", id);
+		return jdbcTemplate.queryForObject(sql, params,new MP3RowMapper());
+	}
+
+	@Override
+	public List<MP3> getMP3ListByName(String name) {
+		String sql = "select * from mp3 where upper(name) like :name";
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("name", "%"+name.toUpperCase()+"%");
+		
+		return jdbcTemplate.query(sql, params, new MP3RowMapper());
+	}
+
+	@Override
+	public List<MP3> getMP3ListByAuthor(String author) {
+		String sql = "select * from mp3 where upper(author) like :author";
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("author", "%"+author.toUpperCase()+"%");
+		return jdbcTemplate.query(sql, params, new MP3RowMapper());
+		}
+
+
+	@Override
+	public void deleteById(int id) {
+		String sql = "delete from mp3 where id = :id";
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("id", id);
+		jdbcTemplate.update(sql,params) ;
+		
+	}
+
+
+	@Override
+	public void addCollection(List<MP3> mp3List) {
+		for(MP3 mp3 : mp3List) {
+			insert(mp3);
+		}
+		
+	}
+
+
+
+	private static final class MP3RowMapper implements org.springframework.jdbc.core.RowMapper<MP3>{
+
+		@Override
+		public MP3 mapRow(ResultSet rs, int rowNum) throws SQLException {
+			MP3 mp3 = new MP3();
+			mp3.setId(rs.getInt("id"));
+			mp3.setName(rs.getString("name"));
+			mp3.setAuthor(rs.getString("author"));
+			return mp3;
+		}
+		
+	}
+
+
+	@Override
+	public int getMP3Count() {
+		String sql = "select count(*) from mp3";
+		return jdbcTemplate.getJdbcOperations().queryForObject(sql, Integer.class);
+	}
+}

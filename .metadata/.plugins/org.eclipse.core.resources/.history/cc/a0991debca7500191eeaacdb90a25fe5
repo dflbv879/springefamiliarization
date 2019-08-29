@@ -1,0 +1,25 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.*"%>    
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+   Hello from jsp 
+   <br>
+   
+   <%
+     Map<String,Integer> persons = (Map<String,Integer>)request.getAttribute("persons");
+
+     persons.put("fd", 1);
+     for(Map.Entry<String, Integer> entry : persons.entrySet()){
+	   out.println("<tr><td>"+entry.getKey()+"</tr></td>"+entry.getValue()+"</tr></td>");
+    }
+   %>
+   
+  
+</body>
+</html>

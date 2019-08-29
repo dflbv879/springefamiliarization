@@ -1,0 +1,95 @@
+package spring.dao.impls;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import javax.sql.DataSource;
+import javax.swing.tree.RowMapper;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.stereotype.Component;
+
+import spring.dao.interfaces.MP3Dao;
+import spring.dao.objects.MP3;
+
+@Component("sqliteDAO")
+public class SQLiteDAO implements MP3Dao{
+
+	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	public void setDataSource(DataSource dataSource) {
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	}
+	
+	
+	@Override
+	public void insert(MP3 mp3) {
+		String sql = "insert into MP3(name, author) VALUES (? ,?)";
+		jdbcTemplate.update(sql,new Object[] {mp3.getName(),mp3.getAuthor()});
+	}
+
+	@Override
+	public void delete(MP3 mp3) {
+		deleteById(getId(mp3.getAuthor()));
+		
+	}
+
+	@Override
+	public MP3 getMP3ByID(int id) {
+		String sql ="select * from mp3 where id =:id";
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("id", id);
+		return jdbcTemplate.queryForObject(sql, params, rowMapper);
+	}
+
+	@Override
+	public List<MP3> getMP3ListByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MP3> getMP3ListByAuthor(String author) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void deleteById(int id) {
+		String sql = "delete from mp3 where id = ?";
+		jdbcTemplate.update(sql,id) ;
+		
+	}
+
+
+	@Override
+	public void addCollection(List<MP3> mp3List) {
+		for(MP3 mp3 : mp3List) {
+			insert(mp3);
+		}
+		
+	}
+
+
+	@Override
+	public int getId(String author) {
+		String sql = "select id from MP3 where name= ?";
+		return jdbcTemplate.execute(sql,author) ;
+	}
+
+	private static final class MP3RowMapper implements org.springframework.jdbc.core.RowMapper<MP3>{
+
+		@Override
+		public MP3 mapRow(ResultSet rs, int rowNum) throws SQLException {
+			MP3 mp3 = new MP3();
+			mp3.set
+		}
+		
+	}
+}
